@@ -1,0 +1,19 @@
+[Unit]
+Description=Playit.gg Tunnel Agent Container
+After=network-online.target minecraft.service
+Wants=network-online.target minecraft.service
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f playit-agent
+ExecStart=/usr/bin/podman run \
+    --name playit-agent \
+    --net=host \
+    -e SECRET_KEY={{ vault_playit_secret_key }} \
+    ghcr.io/playit-cloud/playit-agent:1.0
+ExecStop=/usr/bin/podman stop -t 10 playit-agent
+ExecStopPost=-/usr/bin/podman rm -f playit-agent
+
+[Install]
+WantedBy=multi-user.target

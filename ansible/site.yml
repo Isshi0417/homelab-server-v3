@@ -14,3 +14,7 @@
 - name: Services Deployment
   import_playbook: ./playbooks/04_services_deploy.yml
   tags: services
+
+- name: Playit.gg Server Setup
+  import_playbook: ./playbooks/05_playit_setup.yml
+  tags: playit
