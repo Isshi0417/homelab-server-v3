@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sho Ishida - Systems Architect & Infrastructure Engineer. Certified RHCSA Administrator specializing in AlmaLinux hypervisors, Ansible playbooks, Terraform, and secure Cloudflare/Playit tunnels.">
+  <meta name="description"
+    content="Sho Ishida - Systems Architect & Infrastructure Engineer. Certified RHCSA Administrator specializing in AlmaLinux hypervisors, Ansible playbooks, Terraform, and secure Cloudflare/Playit tunnels.">
   <title>Sho Ishida | Systems Architect &amp; Infrastructure Engineer</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <div class="container">
-    
+
     <!-- Hero Header -->
     <header class="hero-section">
       <h1 id="portfolio-title">Sho Ishida</h1>
       <p class="subtitle">Systems Architect &amp; Infrastructure Engineer</p>
-      
+
       <!-- Badges indicating language proficiency and certifications -->
       <div class="badge-container">
-        <span class="badge lang-badge" id="lang-english">English (Fluent)</span>
+        <span class="badge lang-badge" id="lang-english">English (Native)</span>
         <span class="badge lang-badge" id="lang-japanese">日本語 (Native)</span>
         <span class="badge lang-badge" id="lang-korean">한국어 (Native)</span>
         <span class="badge" id="badge-rhcsa">RHCSA Certified</span>
         <span class="badge" id="badge-sec">CompTIA Security+ Prep</span>
       </div>
-      
+
       <!-- Primary Action Buttons for Resume Downloads -->
       <div class="btn-group">
-        <a href="resume/Sho_Ishida_Resume.pdf" download="Sho_Ishida_Resume.pdf" id="download-pdf" class="btn btn-primary">
+        <a href="resume/Sho_Ishida_Resume.pdf" download="Sho_Ishida_Resume.pdf" id="download-pdf"
+          class="btn btn-primary">
           Download Resume (PDF)
         </a>
-        <a href="resume/Sho_Ishida_Resume.docx" download="Sho_Ishida_Resume.docx" id="download-docx" class="btn btn-secondary">
+        <a href="resume/Sho_Ishida_Resume.docx" download="Sho_Ishida_Resume.docx" id="download-docx"
+          class="btn btn-secondary">
           Download Word (DOCX)
         </a>
       </div>
@@ -38,19 +43,24 @@
 
     <!-- Two-Column Portfolio Grid -->
     <div class="portfolio-grid">
-      
+
       <!-- LEFT COLUMN: Profile, Experience, Homelab Architecture -->
       <main class="main-column">
-        
+
         <!-- Professional Summary Card -->
         <section class="card-section" id="sec-summary">
           <h2 class="section-title">Professional Summary</h2>
           <div class="card">
             <p class="profile-text">
-              Trilingual (English, Japanese, Korean) and RHCSA-certified Linux Systems Administrator with a strong foundation in cybersecurity (CompTIA Security+ in progress). Hands-on experience designing, provisioning, and automating enterprise-grade virtualization infrastructure using Infrastructure as Code (IaC) tools like Terraform and Ansible on Red Hat Enterprise Linux (RHEL) 10 downstreams.
+              Trilingual (English, Japanese, Korean) and RHCSA-certified Linux Systems Administrator with a strong
+              foundation in cybersecurity (CompTIA Security+ in progress). Hands-on experience designing, provisioning,
+              and automating enterprise-grade virtualization infrastructure using Infrastructure as Code (IaC) tools
+              like Terraform and Ansible on Red Hat Enterprise Linux (RHEL) 10 downstreams.
             </p>
             <p class="profile-text">
-              Proven ability to automate server configuration management, troubleshoot containerized workloads, establish directory service domains, and secure hybrid network access utilizing tunnels with zero open inbound ports.
+              Proven ability to automate server configuration management, troubleshoot containerized workloads,
+              establish directory service domains, and secure hybrid network access utilizing tunnels with zero open
+              inbound ports.
             </p>
           </div>
         </section>
@@ -60,11 +70,13 @@
           <h2 class="section-title">Homelab v3 Infrastructure Topology</h2>
           <div class="card">
             <p class="profile-text" style="margin-bottom: 20px;">
-              A fully automated private cloud environment deployed from a bare-metal baseline. Virtual resources are provisioned on the AlmaLinux host using Terraform (KVM/Libvirt provider) and configured using containerized Ansible playbooks.
+              A fully automated private cloud environment deployed from a bare-metal baseline. Virtual resources are
+              provisioned on the AlmaLinux host using Terraform (KVM/Libvirt provider) and configured using
+              containerized Ansible playbooks.
             </p>
-            
+
             <div class="vm-nodes-grid">
-              
+
               <!-- VM Node 1 -->
               <div class="vm-node-card" id="node-freeipa">
                 <div class="vm-node-header">
@@ -121,13 +133,25 @@
                 </div>
                 <p class="subtitle-detail">Automated Private Cloud &amp; Infrastructure Deployment</p>
                 <ul class="bullets">
-                  <li><strong>Bare-Metal Hypervisor &amp; IaC Provisioning:</strong> Deployed a headless AlmaLinux 10 KVM hypervisor on physical hardware with LVM storage optimization. Automated UEFI-based VM provisioning using Terraform and Libvirt, resolving x86-64-v3 CPU microarchitecture requirements via host-passthrough and IDE deprecation using custom virtio-scsi disk mappings.</li>
-                  <li><strong>Configuration Management &amp; DevSecOps:</strong> Engineered Ansible playbooks to automate hypervisor setup, timezone sync, host preparation, user provisioning, and service lifecycles. Secured sensitive credentials using AES-256 encrypted Ansible Vault files and utilized SSH agent socket forwarding for keyless domain authentication.</li>
-                  <li><strong>Centralized Identity &amp; DNS Management:</strong> Configured FreeIPA (LDAP, Kerberos, BIND DNS, PKI CA) on a dedicated VM, automatically enrolling all VM clients. Automated nmcli client DNS redirection and configured PAM automatic user home directory creation (--mkhomedir).</li>
-                  <li><strong>Secure Ingress, Tunnels &amp; Observability:</strong> Deployed secure Cloudflare Tunnels to expose the portfolio web server and Grafana dashboard externally, and configured Playit.gg for secure Minecraft game tunneling. Orchestrated Node Exporter, Prometheus, and Grafana across all nodes for centralized cluster telemetry and monitoring.</li>
+                  <li><strong>Bare-Metal Hypervisor &amp; IaC Provisioning:</strong> Deployed a headless AlmaLinux 10
+                    KVM hypervisor on physical hardware with LVM storage optimization. Automated UEFI-based VM
+                    provisioning using Terraform and Libvirt, resolving x86-64-v3 CPU microarchitecture requirements via
+                    host-passthrough and IDE deprecation using custom virtio-scsi disk mappings.</li>
+                  <li><strong>Configuration Management &amp; DevSecOps:</strong> Engineered Ansible playbooks to
+                    automate hypervisor setup, timezone sync, host preparation, user provisioning, and service
+                    lifecycles. Secured sensitive credentials using AES-256 encrypted Ansible Vault files and utilized
+                    SSH agent socket forwarding for keyless domain authentication.</li>
+                  <li><strong>Centralized Identity &amp; DNS Management:</strong> Configured FreeIPA (LDAP, Kerberos,
+                    BIND DNS, PKI CA) on a dedicated VM, automatically enrolling all VM clients. Automated nmcli client
+                    DNS redirection and configured PAM automatic user home directory creation (--mkhomedir).</li>
+                  <li><strong>Secure Ingress, Tunnels &amp; Observability:</strong> Deployed secure Cloudflare Tunnels
+                    to expose the portfolio web server and Grafana dashboard externally, and configured Playit.gg for
+                    secure Minecraft game tunneling. Orchestrated Node Exporter, Prometheus, and Grafana across all
+                    nodes for centralized cluster telemetry and monitoring.</li>
                 </ul>
                 <div style="margin-top: 15px;">
-                  <a href="https://github.com/Isshi0417" target="_blank" id="git-project-link" class="btn btn-secondary" style="font-size: 0.75rem; padding: 8px 16px;">Source Repositories &rarr;</a>
+                  <a href="https://github.com/Isshi0417" target="_blank" id="git-project-link" class="btn btn-secondary"
+                    style="font-size: 0.75rem; padding: 8px 16px;">Source Repositories &rarr;</a>
                 </div>
               </div>
             </div>
@@ -139,7 +163,7 @@
           <h2 class="section-title">Technical &amp; Support Experience</h2>
           <div class="card">
             <div class="list-container">
-              
+
               <div class="list-item">
                 <div class="list-item-header">
                   <h4>Bilingual Customer Service Representative</h4>
@@ -147,8 +171,11 @@
                 </div>
                 <p class="subtitle-detail">HCL Technologies - Honolulu, HI</p>
                 <ul class="bullets">
-                  <li>Provided bilingual technical support in Japanese and English to certification exam candidates, troubleshooting workstation configurations and local network connectivity issues during high-stakes testing.</li>
-                  <li>Verified client identities and managed profile compliance in accordance with NDA guidelines and privacy regulations.</li>
+                  <li>Provided bilingual technical support in Japanese and English to certification exam candidates,
+                    troubleshooting workstation configurations and local network connectivity issues during high-stakes
+                    testing.</li>
+                  <li>Verified client identities and managed profile compliance in accordance with NDA guidelines and
+                    privacy regulations.</li>
                   <li>Utilized Microsoft Excel for post-examination session tracking, reporting, and logs.</li>
                 </ul>
               </div>
@@ -159,7 +186,8 @@
                   <span class="date">Dec 2024 - Present</span>
                 </div>
                 <p class="subtitle-detail">Goeup Kendo Hall - Yangju, South Korea</p>
-                <p class="desc">Leadership and instruction for students and adults. Built team communication, safety standards, and structured drill sessions.</p>
+                <p class="desc">Leadership and instruction for students and adults. Built team communication, safety
+                  standards, and structured drill sessions.</p>
               </div>
 
               <div class="list-item">
@@ -168,7 +196,8 @@
                   <span class="date">Apr 2020 - Oct 2023</span>
                 </div>
                 <p class="subtitle-detail">Pacific Core Academy &amp; Independent - Honolulu, HI</p>
-                <p class="desc">Guided students through complex computer science and math concepts. Tracked learning sessions and compiled student growth profiles.</p>
+                <p class="desc">Guided students through complex computer science and math concepts. Tracked learning
+                  sessions and compiled student growth profiles.</p>
               </div>
 
             </div>
@@ -179,13 +208,13 @@
 
       <!-- RIGHT COLUMN: Skills, Certs, Specs, and Contact -->
       <aside class="sidebar-column">
-        
+
         <!-- Technical Skill Matrix -->
         <section class="card-section" id="sec-skills">
           <h2 class="section-title">Skill Matrix</h2>
           <div class="card">
             <div class="skills-container">
-              
+
               <div class="skills-group">
                 <h4>Operating Systems</h4>
                 <div class="skill-tags">
@@ -242,7 +271,7 @@
                   <span class="skill-tag">Node Exporter</span>
                 </div>
               </div>
-              
+
             </div>
           </div>
         </section>
@@ -258,20 +287,23 @@
                   <span class="date">Active</span>
                 </div>
                 <p class="subtitle-detail">Red Hat Certified System Administrator</p>
-                
+
                 <!-- Credly Badge Embed -->
                 <div class="credly-badge-container">
-                  <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="ea1cfbb0-1d36-4090-b38d-f025088122b3" data-share-badge-host="https://www.credly.com"></div>
+                  <div data-iframe-width="150" data-iframe-height="270"
+                    data-share-badge-id="ea1cfbb0-1d36-4090-b38d-f025088122b3"
+                    data-share-badge-host="https://www.credly.com"></div>
                 </div>
               </div>
-              
+
               <div class="list-item" style="border-bottom: none; padding-bottom: 0; margin-top: 15px;">
                 <div class="list-item-header">
                   <h4>CompTIA Security+</h4>
                   <span class="date" style="color: var(--warning);">In Progress</span>
                 </div>
                 <p class="subtitle-detail">Target Exam: August 2026</p>
-                <p class="desc" style="font-size: 0.8rem; color: var(--text-muted);">Meets DoD 8570/8140 IAT Level II Baseline</p>
+                <p class="desc" style="font-size: 0.8rem; color: var(--text-muted);">Meets DoD 8570/8140 IAT Level II
+                  Baseline</p>
               </div>
             </div>
           </div>
@@ -369,4 +401,5 @@
   <!-- Credly script loader for badge verification -->
   <script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
 </body>
+
 </html>
