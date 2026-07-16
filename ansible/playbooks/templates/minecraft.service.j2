@@ -1,0 +1,20 @@
+[Unit]
+Description=Minecraft Server Container
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f minecraft
+ExecStart=/usr/bin/podman run --name minecraft \
+    -p 25565:25565 \
+    -v /home/{{ admin_user }}/containers/minecraft:/data \
+    -e EULA=TRUE \
+    -e MEMORY={{ minecraft_ram_limit | default('4G') }} \
+    docker.io/itzg/minecraft-server:latest
+ExecStop=/usr/bin/podman stop -t 20 minecraft
+ExecStopPost=-/usr/bin/podman rm -f minecraft
+
+[Install]
+WantedBy=multi-user.target

@@ -1,2 +1,11 @@
 [hypervisor]
 hypervisor.lab.local ansible_host=172.30.1.200 ansible_user=sho
+
+[vms]
+freeipa.lab.local ansible_host=172.30.1.85 ansible_user=sho
+portfolio.lab.local ansible_host=172.30.1.93 ansible_user=sho
+minecraft.lab.local ansible_host=172.30.1.91 ansible_user=sho
+navidrome.lab.local ansible_host=172.30.1.92 ansible_user=sho
+
+[vms:vars]
+ansible_python_interpreter=/usr/bin/python3

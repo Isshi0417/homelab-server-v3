@@ -1,0 +1,18 @@
+[Unit]
+Description=Portal Web Server Container
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f portal
+ExecStart=/usr/bin/podman run --name portal \
+    -p 80:80 \
+    -v /home/{{ admin_user }}/containers/portal:/usr/share/nginx/html:ro \
+    docker.io/library/nginx:alpine
+ExecStop=/usr/bin/podman stop -t 10 portal
+ExecStopPost=-/usr/bin/podman rm -f portal
+
+[Install]
+WantedBy=multi-user.target

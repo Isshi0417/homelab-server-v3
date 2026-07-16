@@ -1,0 +1,157 @@
+---
+- name: Deploy Portfolio Dashbaord on Portfolio VM
+  hosts: portfolio.lab.local
+  gather_facts: true
+
+  tasks:
+    - name: Install Podman
+      become: true
+      ansible.builtin.apt:
+        name:
+          - podman
+          - crun
+        state: present
+        update_cache: true
+
+    - name: Create directories
+      ansible.builtin.file:
+        path: "/home/{{ admin_user }}/containers/portal"
+        state: directory
+        mode: "0755"
+
+    - name: Copy portal website files
+      ansible.builtin.copy:
+        src: "../../website/"
+        dest: "/home/{{ admin_user }}/containers/portal"
+        mode: "0644"
+
+    - name: Deploy Portal Systemd Service
+      become: true
+      ansible.builtin.template:
+        src: "./templates/portal.service.j2"
+        dest: "/etc/systemd/system/portal.service"
+        mode: "0644"
+
+    - name: Start and enable Portal service
+      become: true
+      ansible.builtin.systemd_service:
+        name: portal.service
+        state: started
+        enabled: true
+        daemon_reload: true
+
+- name: Deploy Minecraft Server on Minecraft VM
+  hosts: minecraft.lab.local
+  gather_facts: true
+
+  tasks:
+    - name: Install Podman
+      become: true
+      ansible.builtin.apt:
+        name:
+          - podman
+          - crun
+        state: present
+        update_cache: true
+
+    - name: Create directories
+      ansible.builtin.file:
+        path: "/home/{{ admin_user }}/containers/minecraft"
+        state: directory
+        mode: "0755"
+
+    - name: Deploy Minecraft Systemd Service
+      become: true
+      ansible.builtin.template:
+        src: "./templates/minecraft.service.j2"
+        dest: "/etc/systemd/system/minecraft.service"
+        mode: "0644"
+
+    - name: Start and enabled Minecraft service
+      become: true
+      ansible.builtin.systemd_service:
+        name: minecraft.service
+        state: started
+        enabled: true
+        daemon_reload: true
+
+- name: Deploy Navidrome and Rclone Mount on Navidrome VM
+  hosts: navidrome.lab.local
+  gather_facts: true
+
+  tasks:
+    - name: Install Podman and utilities
+      become: true
+      ansible.builtin.apt:
+        name:
+          - podman
+          - crun
+          - fuse3
+          - rclone
+        state: present
+        update_cache: true
+
+    - name: Enable user_allow_other in fuse.conf
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/fuse.conf
+        regexp: "^#?user_allow_other"
+        line: "user_allow_other"
+
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "/home/{{ admin_user }}/.config/rclone"
+        - "/home/{{ admin_user }}/containers/navidrome/config"
+        - "/home/{{ admin_user }}/containers/navidrome/cache"
+
+    - name: Create Google Drive mount point
+      become: true
+      ansible.builtin.file:
+        path: /mnt/gdrive
+        state: directory
+        owner: "{{ admin_user }}"
+        group: "{{ admin_user }}"
+        mode: "0755"
+
+    - name: Copy rclone configuration
+      become: true
+      ansible.builtin.template:
+        src: "./templates/rclone.conf.j2"
+        dest: "/home/{{ admin_user }}/.config/rclone/rclone.conf"
+        owner: "{{ admin_user }}"
+        group: "{{ admin_user }}"
+        mode: "0600"
+
+    - name: Configure rclone-mount systemd service
+      become: true
+      ansible.builtin.template:
+        src: "./templates/rclone-mount.service.j2"
+        dest: "/etc/systemd/system/rclone-mount.service"
+        mode: "0644"
+
+    - name: Start and enable rclone-mount service
+      become: true
+      ansible.builtin.systemd_service:
+        name: rclone-mount.service
+        state: started
+        enabled: true
+        daemon_reload: true
+
+    - name: Deploy Navidrome System Service
+      become: true
+      ansible.builtin.template:
+        src: "./templates/navidrome.service.j2"
+        dest: "/etc/systemd/system/navidrome.service"
+        mode: "0644"
+
+    - name: Start and enable Navidrome service
+      become: true
+      ansible.builtin.systemd_service:
+        name: navidrome.service
+        state: started
+        enabled: true
+        daemon_reload: true

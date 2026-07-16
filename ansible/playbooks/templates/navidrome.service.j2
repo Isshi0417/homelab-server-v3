@@ -1,0 +1,23 @@
+[Unit]
+Description=Navidrome Music Streamer Container
+After=network-online.target
+Wants=network-online.target
+Requires=rclone-mount.service
+After=rclone-mount.service
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f navidrome
+ExecStart=/usr/bin/podman run --name navidrome \
+    -p 4533:4533 \
+    -v /home/{{ admin_user }}/containers/navidrome/config:/data \
+    -v /home/{{ admin_user }}/containers/navidrome/cache:/cache \
+    -v /mnt/gdrive:/music:ro \
+    -e ND_MUSICFOLDER=/music \
+    docker.io/deluan/navidrome:latest
+ExecStop=/usr/bin/podman stop -t 10 navidrome
+ExecStopPost=-/usr/bin/podman rm -f navidrome
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+---
+podman_user: "sho"
+podman_user_home: "/home/sho"
+
+rclone_gdrive_token: "{{ vault_rclone_gdrive_token }}"
+
+minecraft_ram_limit: "4G"

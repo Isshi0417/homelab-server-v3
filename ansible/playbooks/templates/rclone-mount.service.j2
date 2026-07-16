@@ -1,0 +1,20 @@
+[Unit]
+Description=Rclone Google Drive Mount
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+User={{ admin_user }}
+Group={{ admin_user }}
+ExecStart=/usr/bin/rclone mount gdrive: /mnt/gdrive \
+    --config=/home/{{ admin_user }}/.config/rclone/rclone.conf \
+    --vfs-cache-mode full \
+    --vfs-cache-max-age 24h \
+    --allow-other
+ExecStop=/bin/fusermount3 -u /mnt/gdrive
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

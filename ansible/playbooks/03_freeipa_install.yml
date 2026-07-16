@@ -1,0 +1,64 @@
+---
+- name: Install and Configure FreeIPA Server
+  hosts: freeipa.lab.local
+  gather_facts: true
+
+  tasks:
+    - name: Set hostname to fully-qualified domain name
+      become: true
+      ansible.builtin.hostname:
+        name: "freeipa.{{ domain_name }}"
+
+    - name: Install FreeIPA Server packages and firewalld
+      become: true
+      ansible.builtin.dnf:
+        name:
+          - freeipa-server
+          - freeipa-server-dns
+          - bind
+          - bind-utils
+          - firewalld
+          - python3-firewall
+        state: present
+
+    - name: Ensure firewalld is started and enabled
+      become: true
+      ansible.builtin.systemd_service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Check if FreeIPA is already installed
+      ansible.builtin.stat:
+        path: /etc/ipa/default.conf
+      register: ipa_installed
+
+    - name: Run FreeIPA unattended installer
+      become: true
+      ansible.builtin.command: >
+        ipa-server-install
+        --unattended
+        --realm={{ realm_name }}
+        --domain={{ domain_name }}
+        --ds-password={{ ipa_directory_manager_password }}
+        --admin-password={{ ipa_admin_password }}
+        --setup-dns
+        --forwarder=1.1.1.1
+        --no-host-dns
+      when: not ipa_installed.stat.exists
+      vars:
+        ansible_command_timeout: 1200
+      changed_when: false
+
+    - name: Configure firewalld rules for FreeIPA
+      become: true
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - freeipa-ldaps
+        - freeipa-ldap
+        - dns
+        - kerberos

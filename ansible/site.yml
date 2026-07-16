@@ -1,0 +1,16 @@
+---
+- name: Host Preparation
+  import_playbook: ./playbooks/01_host_prep.yml
+  tags: host_prep
+
+- name: Virtualization Setup
+  import_playbook: ./playbooks/02_kvm_setup.yml
+  tags: kvm_setup
+
+- name: Identity Management Installation
+  import_playbook: ./playbooks/03_freeipa_install.yml
+  tags: freeipa
+
+- name: Services Deployment
+  import_playbook: ./playbooks/04_services_deploy.yml
+  tags: services
