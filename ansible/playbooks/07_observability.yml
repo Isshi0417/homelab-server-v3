@@ -65,6 +65,7 @@
 
   tasks:
     - name: Create Prometheus and Grafana directories
+      become: true
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
