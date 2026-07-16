@@ -1,1 +1,372 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sho Ishida - Systems Architect & Infrastructure Engineer. Certified RHCSA Administrator specializing in AlmaLinux hypervisors, Ansible playbooks, Terraform, and secure Cloudflare/Playit tunnels.">
+  <title>Sho Ishida | Systems Architect &amp; Infrastructure Engineer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Hero Header -->
+    <header class="hero-section">
+      <h1 id="portfolio-title">Sho Ishida</h1>
+      <p class="subtitle">Systems Architect &amp; Infrastructure Engineer</p>
+      
+      <!-- Badges indicating language proficiency and certifications -->
+      <div class="badge-container">
+        <span class="badge lang-badge" id="lang-english">English (Fluent)</span>
+        <span class="badge lang-badge" id="lang-japanese">日本語 (Native)</span>
+        <span class="badge lang-badge" id="lang-korean">한국어 (Native)</span>
+        <span class="badge" id="badge-rhcsa">RHCSA Certified</span>
+        <span class="badge" id="badge-sec">CompTIA Security+ Prep</span>
+      </div>
+      
+      <!-- Primary Action Buttons for Resume Downloads -->
+      <div class="btn-group">
+        <a href="resume/Sho_Ishida_Resume.pdf" download="Sho_Ishida_Resume.pdf" id="download-pdf" class="btn btn-primary">
+          Download Resume (PDF)
+        </a>
+        <a href="resume/Sho_Ishida_Resume.docx" download="Sho_Ishida_Resume.docx" id="download-docx" class="btn btn-secondary">
+          Download Word (DOCX)
+        </a>
+      </div>
+    </header>
+
+    <!-- Two-Column Portfolio Grid -->
+    <div class="portfolio-grid">
+      
+      <!-- LEFT COLUMN: Profile, Experience, Homelab Architecture -->
+      <main class="main-column">
+        
+        <!-- Professional Summary Card -->
+        <section class="card-section" id="sec-summary">
+          <h2 class="section-title">Professional Summary</h2>
+          <div class="card">
+            <p class="profile-text">
+              Trilingual (English, Japanese, Korean) and RHCSA-certified Linux Systems Administrator with a strong foundation in cybersecurity (CompTIA Security+ in progress). Hands-on experience designing, provisioning, and automating enterprise-grade virtualization infrastructure using Infrastructure as Code (IaC) tools like Terraform and Ansible on Red Hat Enterprise Linux (RHEL) 10 downstreams.
+            </p>
+            <p class="profile-text">
+              Proven ability to automate server configuration management, troubleshoot containerized workloads, establish directory service domains, and secure hybrid network access utilizing tunnels with zero open inbound ports.
+            </p>
+          </div>
+        </section>
+
+        <!-- Homelab v3 Infrastructure Architecture -->
+        <section class="card-section" id="sec-homelab-infra">
+          <h2 class="section-title">Homelab v3 Infrastructure Topology</h2>
+          <div class="card">
+            <p class="profile-text" style="margin-bottom: 20px;">
+              A fully automated private cloud environment deployed from a bare-metal baseline. Virtual resources are provisioned on the AlmaLinux host using Terraform (KVM/Libvirt provider) and configured using containerized Ansible playbooks.
+            </p>
+            
+            <div class="vm-nodes-grid">
+              
+              <!-- VM Node 1 -->
+              <div class="vm-node-card" id="node-freeipa">
+                <div class="vm-node-header">
+                  <h4>freeipa.lab.local</h4>
+                  <span class="node-dot"></span>
+                </div>
+                <p class="vm-node-ip">172.30.1.85 [AlmaLinux 10]</p>
+                <p class="vm-node-role">Identity Provider, LDAP Authentication, BIND DNS Server, PKI CA Realm</p>
+              </div>
+
+              <!-- VM Node 2 -->
+              <div class="vm-node-card" id="node-portfolio">
+                <div class="vm-node-header">
+                  <h4>portfolio.lab.local</h4>
+                  <span class="node-dot"></span>
+                </div>
+                <p class="vm-node-ip">172.30.1.93 [Debian 12]</p>
+                <p class="vm-node-role">Nginx Web Server, Prometheus Metrics, Grafana Analytics, Cloudflared Tunnel</p>
+              </div>
+
+              <!-- VM Node 3 -->
+              <div class="vm-node-card" id="node-minecraft">
+                <div class="vm-node-header">
+                  <h4>minecraft.lab.local</h4>
+                  <span class="node-dot"></span>
+                </div>
+                <p class="vm-node-ip">172.30.1.91 [Debian 12]</p>
+                <p class="vm-node-role">Dedicated Minecraft Game Server, Playit.gg Secure Tunnel Agent</p>
+              </div>
+
+              <!-- VM Node 4 -->
+              <div class="vm-node-card" id="node-navidrome">
+                <div class="vm-node-header">
+                  <h4>navidrome.lab.local</h4>
+                  <span class="node-dot"></span>
+                </div>
+                <p class="vm-node-ip">172.30.1.92 [Debian 12]</p>
+                <p class="vm-node-role">Navidrome Music Streamer, Rclone Google Drive FUSE Mount Integration</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Systems Engineering Projects -->
+        <section class="card-section" id="sec-projects">
+          <h2 class="section-title">Systems Engineering Projects</h2>
+          <div class="card">
+            <div class="list-container">
+              <div class="list-item" style="border-bottom: none; padding-bottom: 0;">
+                <div class="list-item-header">
+                  <h4 style="font-size: 1.15rem;">Enterprise Hybrid IaC Virtualization Homelab</h4>
+                  <span class="date">Jul 2025 - Present</span>
+                </div>
+                <p class="subtitle-detail">Automated Private Cloud &amp; Infrastructure Deployment</p>
+                <ul class="bullets">
+                  <li><strong>Bare-Metal Hypervisor &amp; IaC Provisioning:</strong> Deployed a headless AlmaLinux 10 KVM hypervisor on physical hardware with LVM storage optimization. Automated UEFI-based VM provisioning using Terraform and Libvirt, resolving x86-64-v3 CPU microarchitecture requirements via host-passthrough and IDE deprecation using custom virtio-scsi disk mappings.</li>
+                  <li><strong>Configuration Management &amp; DevSecOps:</strong> Engineered Ansible playbooks to automate hypervisor setup, timezone sync, host preparation, user provisioning, and service lifecycles. Secured sensitive credentials using AES-256 encrypted Ansible Vault files and utilized SSH agent socket forwarding for keyless domain authentication.</li>
+                  <li><strong>Centralized Identity &amp; DNS Management:</strong> Configured FreeIPA (LDAP, Kerberos, BIND DNS, PKI CA) on a dedicated VM, automatically enrolling all VM clients. Automated nmcli client DNS redirection and configured PAM automatic user home directory creation (--mkhomedir).</li>
+                  <li><strong>Secure Ingress, Tunnels &amp; Observability:</strong> Deployed secure Cloudflare Tunnels to expose the portfolio web server and Grafana dashboard externally, and configured Playit.gg for secure Minecraft game tunneling. Orchestrated Node Exporter, Prometheus, and Grafana across all nodes for centralized cluster telemetry and monitoring.</li>
+                </ul>
+                <div style="margin-top: 15px;">
+                  <a href="https://github.com/Isshi0417" target="_blank" id="git-project-link" class="btn btn-secondary" style="font-size: 0.75rem; padding: 8px 16px;">Source Repositories &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Technical & Support Experience -->
+        <section class="card-section" id="sec-experience">
+          <h2 class="section-title">Technical &amp; Support Experience</h2>
+          <div class="card">
+            <div class="list-container">
+              
+              <div class="list-item">
+                <div class="list-item-header">
+                  <h4>Bilingual Customer Service Representative</h4>
+                  <span class="date">Feb 2021 - May 2021</span>
+                </div>
+                <p class="subtitle-detail">HCL Technologies - Honolulu, HI</p>
+                <ul class="bullets">
+                  <li>Provided bilingual technical support in Japanese and English to certification exam candidates, troubleshooting workstation configurations and local network connectivity issues during high-stakes testing.</li>
+                  <li>Verified client identities and managed profile compliance in accordance with NDA guidelines and privacy regulations.</li>
+                  <li>Utilized Microsoft Excel for post-examination session tracking, reporting, and logs.</li>
+                </ul>
+              </div>
+
+              <div class="list-item">
+                <div class="list-item-header">
+                  <h4>Coach</h4>
+                  <span class="date">Dec 2024 - Present</span>
+                </div>
+                <p class="subtitle-detail">Goeup Kendo Hall - Yangju, South Korea</p>
+                <p class="desc">Leadership and instruction for students and adults. Built team communication, safety standards, and structured drill sessions.</p>
+              </div>
+
+              <div class="list-item">
+                <div class="list-item-header">
+                  <h4>Academic Tutor</h4>
+                  <span class="date">Apr 2020 - Oct 2023</span>
+                </div>
+                <p class="subtitle-detail">Pacific Core Academy &amp; Independent - Honolulu, HI</p>
+                <p class="desc">Guided students through complex computer science and math concepts. Tracked learning sessions and compiled student growth profiles.</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- RIGHT COLUMN: Skills, Certs, Specs, and Contact -->
+      <aside class="sidebar-column">
+        
+        <!-- Technical Skill Matrix -->
+        <section class="card-section" id="sec-skills">
+          <h2 class="section-title">Skill Matrix</h2>
+          <div class="card">
+            <div class="skills-container">
+              
+              <div class="skills-group">
+                <h4>Operating Systems</h4>
+                <div class="skill-tags">
+                  <span class="skill-tag">AlmaLinux 10</span>
+                  <span class="skill-tag">RHEL 9 / 10</span>
+                  <span class="skill-tag">Debian 12</span>
+                  <span class="skill-tag">Rocky Linux</span>
+                  <span class="skill-tag">Fedora / Nobara</span>
+                  <span class="skill-tag">Windows 11</span>
+                </div>
+              </div>
+
+              <div class="skills-group">
+                <h4>Automation &amp; IaC</h4>
+                <div class="skill-tags">
+                  <span class="skill-tag">Ansible Core</span>
+                  <span class="skill-tag">Ansible Navigator</span>
+                  <span class="skill-tag">Ansible Vault</span>
+                  <span class="skill-tag">Terraform</span>
+                  <span class="skill-tag">Bash Scripting</span>
+                  <span class="skill-tag">Python (sys)</span>
+                </div>
+              </div>
+
+              <div class="skills-group">
+                <h4>Virtualization &amp; Pods</h4>
+                <div class="skill-tags">
+                  <span class="skill-tag">KVM / QEMU</span>
+                  <span class="skill-tag">Libvirt</span>
+                  <span class="skill-tag">Podman (Rootless)</span>
+                  <span class="skill-tag">Docker Compose</span>
+                </div>
+              </div>
+
+              <div class="skills-group">
+                <h4>Networking &amp; Security</h4>
+                <div class="skill-tags">
+                  <span class="skill-tag">BIND DNS</span>
+                  <span class="skill-tag">Bridge (br0)</span>
+                  <span class="skill-tag">NetworkManager (nmcli)</span>
+                  <span class="skill-tag">Firewalld</span>
+                  <span class="skill-tag">SELinux</span>
+                  <span class="skill-tag">Cloudflare Tunnels</span>
+                  <span class="skill-tag">Playit.gg Tunnels</span>
+                  <span class="skill-tag">Kerberos / LDAP</span>
+                </div>
+              </div>
+
+              <div class="skills-group">
+                <h4>Monitoring</h4>
+                <div class="skill-tags">
+                  <span class="skill-tag">Prometheus</span>
+                  <span class="skill-tag">Grafana</span>
+                  <span class="skill-tag">Node Exporter</span>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </section>
+
+        <!-- Certifications -->
+        <section class="card-section" id="sec-certs">
+          <h2 class="section-title">Certifications</h2>
+          <div class="card">
+            <div class="list-container">
+              <div class="list-item" style="border-bottom: none; padding-bottom: 0;">
+                <div class="list-item-header">
+                  <h4>RHCSA Certificate</h4>
+                  <span class="date">Active</span>
+                </div>
+                <p class="subtitle-detail">Red Hat Certified System Administrator</p>
+                
+                <!-- Credly Badge Embed -->
+                <div class="credly-badge-container">
+                  <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="ea1cfbb0-1d36-4090-b38d-f025088122b3" data-share-badge-host="https://www.credly.com"></div>
+                </div>
+              </div>
+              
+              <div class="list-item" style="border-bottom: none; padding-bottom: 0; margin-top: 15px;">
+                <div class="list-item-header">
+                  <h4>CompTIA Security+</h4>
+                  <span class="date" style="color: var(--warning);">In Progress</span>
+                </div>
+                <p class="subtitle-detail">Target Exam: August 2026</p>
+                <p class="desc" style="font-size: 0.8rem; color: var(--text-muted);">Meets DoD 8570/8140 IAT Level II Baseline</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- System Specifications -->
+        <section class="card-section" id="sec-specs">
+          <h2 class="section-title">Host Specifications</h2>
+          <div class="card">
+            <div class="specs-list">
+              <div class="spec-item">
+                <span class="label">Hardware</span>
+                <span class="val">BOSGAME P3 Lite</span>
+              </div>
+              <div class="spec-item">
+                <span class="label">CPU Type</span>
+                <span class="val">AMD Ryzen 7 6800H</span>
+              </div>
+              <div class="spec-item">
+                <span class="label">Memory</span>
+                <span class="val">32GB DDR5 RAM</span>
+              </div>
+              <div class="spec-item">
+                <span class="label">Storage</span>
+                <span class="val">1TB NVMe (Thin LVM)</span>
+              </div>
+              <div class="spec-item">
+                <span class="label">Host OS</span>
+                <span class="val">AlmaLinux 10</span>
+              </div>
+              <div class="spec-item">
+                <span class="label">Bridge LAN</span>
+                <span class="val">br0 (172.30.1.200)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact Registry Section -->
+        <section class="card-section" id="sec-contact">
+          <h2 class="section-title">Contact Registry</h2>
+          <div class="card">
+            <div class="contact-grid">
+              <a href="mailto:shooey623@gmail.com" id="contact-email" class="contact-link">
+                <span class="label">Email</span> shooey623@gmail.com
+              </a>
+              <a href="https://gitea.shooey.xyz/sho" target="_blank" id="contact-gitea" class="contact-link">
+                <span class="label">Gitea</span> gitea.shooey.xyz/sho
+              </a>
+              <a href="https://github.com/Isshi0417" target="_blank" id="contact-github" class="contact-link">
+                <span class="label">GitHub</span> github.com/Isshi0417
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </aside>
+
+    </div>
+
+    <!-- Education & accomplishments nested block -->
+    <div class="footer-row-grid" style="margin-top: 30px;">
+      <section class="card-section" id="sec-education" style="margin-bottom: 0;">
+        <h2 class="section-title">Education</h2>
+        <div class="card">
+          <div class="list-item" style="border-bottom: none; padding-bottom: 0;">
+            <h4 style="font-size: 0.95rem;">A.S. Computer Science</h4>
+            <p class="subtitle-detail">University of the People</p>
+            <p class="desc" style="font-size: 0.8rem;">Pasadena, CA (Remote environment)</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card-section" id="sec-accomplishments" style="margin-bottom: 0;">
+        <h2 class="section-title">Accomplishments &amp; Licenses</h2>
+        <div class="card">
+          <ul class="bullets" style="font-size: 0.82rem; padding-left: 15px;">
+            <li style="margin-bottom: 6px;">4-Dan Kendo (KKA/FIK Black Belt, instruction &amp; leadership)</li>
+            <li style="margin-bottom: 6px;">PADI Divemaster Professional safety license</li>
+            <li style="margin-bottom: 6px;">Ursinus College SIE &amp; Rice Memorial Scholarships</li>
+            <li>Consulate General of Korea Essay &amp; Speech Honors</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: 40px;">
+      <p class="footer-text">Sho Ishida | Red Hat Certified System Administrator</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+  <!-- Credly script loader for badge verification -->
+  <script type="text/javascript" async src="//cdn.credly.com/assets/utilities/embed.js"></script>
+</body>
+</html>

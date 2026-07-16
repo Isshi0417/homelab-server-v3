@@ -26,3 +26,6 @@ terraform/*.tfvars.json
 __pycache__/
 *.py[cod]
 *$py.class
+
+# === Other ===
+website/resume/
