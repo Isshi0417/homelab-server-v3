@@ -1,0 +1,28 @@
+# === Ansible ===
+ansible/.vault_pass
+ansible/ansible-navigator.log
+ansible/playbooks/*.retry
+*.retry
+
+# === Terraform ===
+terraform/.terraform/
+terraform/.terraform.lock.*
+
+# === State Files ===
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfstate.d/
+
+# === Variables ===
+terraform/*.tfvars
+terraform/*.tfvars.json
+
+# === OS & IDE ===
+.DS_Store
+.vscode/
+.idea/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
