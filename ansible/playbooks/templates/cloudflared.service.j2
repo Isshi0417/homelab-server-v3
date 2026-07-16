@@ -1,0 +1,10 @@
+[Unit]
+Description=Cloudflare Tunnel Agent Container
+After=network-online.target portal.service
+Wants=network-online.target portal.service
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f cloudflared-tunnel
+ExecStart=/usr/bin/podman run --name cloudflared-tunnel --net=host docker.io/cloudflare/cloudflared:latest tunnel --no-autoupdate run --token {{ cloudflare_token }}

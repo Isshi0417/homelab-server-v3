@@ -18,3 +18,7 @@
 - name: Playit.gg Server Setup
   import_playbook: ./playbooks/05_playit_setup.yml
   tags: playit
+
+- name: Cloudflared Tunnel Setup
+  import_playbook: ./playbooks/06_cloudflared_setup.yml
+  tags: cloudflared
