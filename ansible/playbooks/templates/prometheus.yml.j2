@@ -1,0 +1,13 @@
+global:
+    scrape_interval: 15s
+    evaluation_interval: 15s
+
+scrape_configs:
+    - job_name: 'homelab-nodes'
+      static_configs:
+        - targets:
+            - '172.30.1.200:9100'
+            - '172.30.1.85:9100'
+            - '172.30.1.93:9100'
+            - '172.30.1.91:9100'
+            - '172.30.1.92:9100'

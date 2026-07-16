@@ -1,0 +1,21 @@
+[Unit]
+Description=Prometheus Metrics Database Container
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f Prometheus
+ExecStart=/usr/bin/podman run --name prometheus \
+    --net=host \
+    -v /home/{{ admin_user }}/containers/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml:z \
+    -v /home/{{ admin_user }}/containers/prometheus/data:/prometheus:z,U \
+    docker.io/prom/prometheus:latest \
+    --config.file=/etc/prometheus/prometheus.yml \
+    --storage.tsdb.path=/prometheus
+ExecStop=/usr/bin/podman stop -t 10 prometheus
+ExecStopPost=-/usr/bin/podman rm -f prometheus
+
+[Install]
+WantedBy=multi-user.target

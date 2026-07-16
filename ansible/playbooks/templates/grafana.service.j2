@@ -1,0 +1,15 @@
+[Unit]
+Description=Grafana Dashboard Container
+After=network-online.target prometheus.service
+Wants=network-online.target prometheus.service
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f grafana
+ExecStart=/usr/bin/podman run --name grafana -p 3000:3000 -v /home/{{ admin_user }}/containers/grafana/data:/var/lib/grafana:z,U docker.io/grafana/grafana-oss:latest
+ExecStop=/usr/bin/podman stop -t 10 grafana
+ExecStopPost=-/usr/bin/podman rm -f grafana
+
+[Install]
+WantedBy=multi-user.target

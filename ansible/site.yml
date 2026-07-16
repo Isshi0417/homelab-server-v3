@@ -22,3 +22,7 @@
 - name: Cloudflared Tunnel Setup
   import_playbook: ./playbooks/06_cloudflared_setup.yml
   tags: cloudflared
+
+- name: Grafana/Prometheus Setup
+  import_playbook: ./playbooks/07_observability.yml
+  tags: observability

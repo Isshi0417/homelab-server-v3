@@ -1,0 +1,118 @@
+---
+- name: Deploy Node Exporter on All Hosts
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Ensure tar and gzip are installed
+      become: true
+      ansible.builtin.package:
+        name:
+          - tar
+          - gzip
+        state: present
+      failed_when: false # Ignore if a host doesn't use standard repositories
+
+    - name: Download Node Exporter binary
+      ansible.builtin.get_url:
+        url: "https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz"
+        dest: "/tmp/node_exporter.tar.gz"
+        mode: "0644"
+
+    - name: Extract Node Exporter package
+      ansible.builtin.unarchive:
+        src: "/tmp/node_exporter.tar.gz"
+        dest: "/tmp"
+        remote_src: true
+
+    - name: Copy Node Exporter binary to destination
+      become: true
+      ansible.builtin.copy:
+        src: "/tmp/node_exporter-1.8.2.linux-amd64/node_exporter"
+        dest: "/usr/local/bin/node_exporter"
+        mode: "0755"
+        remote_src: true
+
+    - name: Deploy Node Exporter Systemd Service
+      become: true
+      ansible.builtin.template:
+        src: "templates/node_exporter.service.j2"
+        dest: "/etc/systemd/system/node_exporter.service"
+        mode: "0644"
+
+    - name: Restore SELinux contexts (RedHat/AlmaLinux)
+      become: true
+      ansible.builtin.command: restorecon -v /usr/local/bin/node_exporter /etc/systemd/system/node_exporter.service
+      when: ansible_os_family == "RedHat"
+
+    - name: Open port 9100 in firewalld
+      become: true
+      ansible.builtin.command: firewall-cmd --permanent --add-port=9100/tcp && firewall-cmd --reload
+      when: ansible_os_family == "RedHat"
+      failed_when: false
+
+    - name: Start and enable Node Exporter
+      become: true
+      ansible.builtin.systemd_service:
+        name: node_exporter.service
+        state: restarted
+        enabled: true
+        daemon_reload: true
+
+- name: Deploy Prometheus and Grafana on Portfolio VM
+  hosts: portfolio.lab.local
+  gather_facts: true
+
+  tasks:
+    - name: Create Prometheus and Grafana directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ admin_user }}"
+        group: "{{ admin_user }}"
+        mode: "0755"
+      loop:
+        - "/home/{{ admin_user }}/containers/prometheus"
+        - "/home/{{ admin_user }}/containers/prometheus/config"
+        - "/home/{{ admin_user }}/containers/prometheus/data"
+        - "/home/{{ admin_user }}/containers/grafana"
+        - "/home/{{ admin_user }}/containers/grafana/data"
+
+    - name: Deploy Prometheus configuration
+      become: true
+      ansible.builtin.template:
+        src: "templates/prometheus.yml.j2"
+        dest: "/home/{{ admin_user }}/containers/prometheus/config/prometheus.yml"
+        owner: "{{ admin_user }}"
+        group: "{{ admin_user }}"
+        mode: "0644"
+
+    - name: Deploy Prometheus Systemd Service
+      become: true
+      ansible.builtin.template:
+        src: "templates/prometheus.service.j2"
+        dest: "/etc/systemd/system/prometheus.service"
+        mode: "0644"
+
+    - name: Deploy Grafana Systemd Service
+      become: true
+      ansible.builtin.template:
+        src: "templates/grafana.service.j2"
+        dest: "/etc/systemd/system/grafana.service"
+        mode: "0644"
+
+    - name: Start and enable Prometheus service
+      become: true
+      ansible.builtin.systemd_service:
+        name: prometheus.service
+        state: restarted
+        enabled: true
+        daemon_reload: true
+
+    - name: Start and enable Grafana service
+      become: true
+      ansible.builtin.systemd_service:
+        name: grafana.service
+        state: restarted
+        enabled: true
+        daemon_reload: true
