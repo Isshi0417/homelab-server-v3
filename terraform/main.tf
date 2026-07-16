@@ -77,9 +77,10 @@ resource "libvirt_cloudinit_disk" "freeipa_init" {
   pool      = libvirt_pool.vm_storage_pool.name
   user_data = data.template_file.user_data.rendered
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
-    ip_address = "172.30.1.85"
-    gateway_ip = "172.30.1.254"
-    dns_ip     = "172.30.1.85"
+    interface_name = "etho0"
+    ip_address     = "172.30.1.85"
+    gateway_ip     = "172.30.1.254"
+    dns_ip         = "172.30.1.85"
   })
 }
 
@@ -88,9 +89,10 @@ resource "libvirt_cloudinit_disk" "portfolio_init" {
   pool      = libvirt_pool.vm_storage_pool.name
   user_data = data.template_file.user_data.rendered
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
-    ip_address = "172.30.1.93"
-    gateway_ip = "172.30.1.254"
-    dns_ip     = "172.30.1.85"
+    interface_name = "ens3"
+    ip_address     = "172.30.1.93"
+    gateway_ip     = "172.30.1.254"
+    dns_ip         = "172.30.1.85"
   })
 }
 
@@ -99,9 +101,10 @@ resource "libvirt_cloudinit_disk" "minecraft_init" {
   pool      = libvirt_pool.vm_storage_pool.name
   user_data = data.template_file.user_data.rendered
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
-    ip_address = "172.30.1.91"
-    gateway_ip = "172.30.1.254"
-    dns_ip     = "172.30.1.85"
+    interface_name = "ens3"
+    ip_address     = "172.30.1.91"
+    gateway_ip     = "172.30.1.254"
+    dns_ip         = "172.30.1.85"
   })
 }
 
@@ -110,9 +113,10 @@ resource "libvirt_cloudinit_disk" "navidrome_init" {
   pool      = libvirt_pool.vm_storage_pool.name
   user_data = data.template_file.user_data.rendered
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
-    ip_address = "172.30.1.92"
-    gateway_ip = "172.30.1.254"
-    dns_ip     = "172.30.1.85"
+    interface_name = "ens3"
+    ip_address     = "172.30.1.92"
+    gateway_ip     = "172.30.1.254"
+    dns_ip         = "172.30.1.85"
   })
 }
 
@@ -193,7 +197,7 @@ resource "libvirt_domain" "navidrome_vm" {
   cloudinit = libvirt_cloudinit_disk.navidrome_init.id
   network_interface {
     bridge = "br0"
-    mac    = "52:54:00:ef:65"
+    mac    = "52:54:00:ee:ef:65"
   }
   console {
     type        = "pty"

@@ -1,7 +1,7 @@
 #cloud-config
 version: 2
 ethernets:
-    eth0:
+    ${interface_name}:
         dhcp4: no
         addresses:
             - ${ip_address}/24
