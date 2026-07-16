@@ -1,0 +1,33 @@
+---
+- name: Setup KVM Hypervisor and Cockpit
+  hosts: hypervisor
+  gather_facts: true
+
+  tasks:
+    - name: Install virtualization packages and Cockpit
+      become: true
+      ansible.builtin.dnf:
+        name:
+          - qemu-kvm
+          - libvirt
+          - virt-install
+          - cockpit
+          - cockpit-machines
+        state: present
+
+    - name: Add user to libvirt group
+      become: true
+      ansible.builtin.user:
+        name: "{{ admin_user }}"
+        groups: libvirt
+        append: true
+
+    - name: Ensure virtualization and cockpit services are active
+      become: true
+      ansible.builtin.systemd_service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+      loop:
+        - libvirtd
+        - cockpit.socket

@@ -1,0 +1,26 @@
+---
+- name: Prepare Hypervisor Host
+  hosts: hypervisor
+  gather_facts: true
+
+  tasks:
+    - name: Enable EPEL repository
+      become: true
+      ansible.builtin.dnf:
+        name: epel-release
+        state: present
+
+    - name: Install utility tools
+      become: true
+      ansible.builtin.dnf:
+        name:
+          - htop
+          - tmux
+          - git
+          - curl
+        state: present
+
+    - name: Configure system timezone
+      become: true
+      ansible.builtin.command: timedatectl set-timezone {{ timezone }}
+      changed_when: false
