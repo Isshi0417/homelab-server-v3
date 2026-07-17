@@ -10,19 +10,29 @@ The workspace utilizes **VS Code Dev Containers** backed by a custom `Dockerfile
 
 ```mermaid
 graph LR
+    %% My Color Palette
+    classDef extNode fill:#212c2a,stroke:#9580ff,color:#f8f8f2,stroke-width:2px;
+    classDef vmNode fill:#2b3b38,stroke:#70a99f,color:#f8f8f2,stroke-width:1px;
+    classDef hostNode fill:#161d1c,stroke:#415854,color:#f8f8f2,stroke-width:2px;
+
+
     subgraph Workstation ["Developer Workstation"]
-        VSCode["VS Code Editor"]
-        SSHKey["~/.ssh/id_ed25519"]
+        VSCode["VS Code Editor"]:::extNode
+        SSHKey["🔑 ~/.ssh/id_ed25519"]:::extNode
     end
 
     subgraph Container ["Dev Container (Debian Bookworm)"]
-        TF["Terraform CLI 1.5+"]
-        Ansible["Ansible Core"]
-        Nav["Ansible Navigator"]
+        TF["🛠️ Terraform CLI 1.5+"]:::vmNode
+        Ansible["🤖 Ansible Core"]:::vmNode
+        Nav["🧭 Ansible Navigator"]:::vmNode
     end
 
     VSCode -->|Mounts Code & SSH| Container
-    Container -->|SSH Keyscan & Sync| Hypervisor["🖥️ Hypervisor (172.30.1.200)"]
+    Container -->|SSH Keyscan & Sync| Hypervisor["🖥️ Hypervisor (172.30.1.200)"]:::hostNode
+
+    %% Subgraph Colors
+    style Workstation fill:#151d1c,stroke:#9580ff,stroke-width:1px;
+    style Container fill:#161d1c,stroke:#70a99f,stroke-width:1px;
 ```
 
 ---
