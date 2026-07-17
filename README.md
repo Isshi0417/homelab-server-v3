@@ -94,3 +94,9 @@ graph TD
     style Nodes fill:#212c2a,stroke:#70a99f,stroke-width:1px;
     style PortfolioServices fill:#161d1c,stroke:#415854,stroke-width:2px;
 ```
+
+---
+
+## 🗂️ Documentation Index
+
+*   [**Local Development Setup**](./docs/01-dev-env.md)
