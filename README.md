@@ -90,6 +90,6 @@ graph TD
     Nodes & PortfolioVM --->|DNS Lookups| VM1
 
     %% Subgraph Colors
-    style Nodes fill:#212c2a,stroke:#7099f,stroke-width:1px;
+    style Nodes fill:#212c2a,stroke:#70a99f,stroke-width:1px;
     style PortfolioVM fill:#161d1c,stroke:#415854,stroke-width:2px;
 ```
