@@ -1,4 +1,4 @@
-# Enterprice Private Cloud & IaC Homelab (v3)
+# Enterprise Private Cloud & IaC Homelab (v3)
 
 A fully automated private cloud environment deployed from bare metal. This project manages the lifecycle of network and server resources, from hardware preparation to multi-tenant container deployments, using Infrastructure as Code (IaC) and configuration management.
 
