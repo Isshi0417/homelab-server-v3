@@ -6,45 +6,90 @@ A fully automated private cloud environment deployed from bare metal. This proje
 
 ## 🗺️ System Architecture
 
-```mermaid
-graph TD
-    subgraph PhysicalHost ["Physical Host: hypervisor.lab.local - 172.30.1.200"]
-        HostOS[AlmaLinux 10 / Cockpit / KVM]
+### Ingress & Traffic Routing
 
-        subgraph VirtualNetwork ["Virtual Network: Bridge Network (br0 - 172.30.1.0/24)"]
-            VM1["freeipa.lab.local (172.30.1.85) [AlmaLinux 10]"]
-            VM2["portfolio.lab.local (172.30.1.93) [Debian 12]"]
-            VM3["minecraft.lab.local (172.30.1.91) [Debian 12]"]
-            VM4["navidrome.lab.local (172.30.1.92) [Debian 12]"]
+This diagram traces how external users connect to the various VM workloads hosted on the physical hypervisor without any port-forwarding or open inbound firewall rules on the local router.
+
+```mermaid
+graph LR
+    %% My Color Palette
+    classDef extNode fill:#212c2a,stroke:#9580ff,color:#f8f8f2,stroke-width:2px;
+    classDef tunnelNode fill:#212c2a,stroke:#ffca80,color:#ffca80,stroke-width:1px,stroke-dasharray: 5 5;
+    classDef vmNode fill:#2b3b38,stroke:#70a99f,color:#f8f8f2,stroke-width:1px;
+    classDef hostNode fill:#161d1c,stroke:#415854,color:#f8f8f2,stroke-width:2px;
+
+    %% Public Clients & Cloud Services
+    PublicUsers["🌐 Web Users"]:::extNode
+    Gamers["🎮 Minecraft Players"]:::extNode
+    GDrive["☁️ Google Drive (Cloud)"]:::extNode
+
+    %% Inbound Tunnels
+    subgraph Tunnels ["Secure Tunnels (Outbound-Only Ingress)"]
+        CF["☁️ Cloudflared Tunnel"]:::tunnelNode
+        PI["🔌 Playit.gg Tunnel"]:::tunnelNode
+    end
+
+    %% Physical Host & VMs
+    subgraph Host ["Physical Host: hypervisor.lab.local"]
+        subgraph Bridge ["Virtual Bridge Network (br0)"]
+            VM2["📄 portfolio (172.30.1.93)<br>Nginx Web Server"]:::vmNode
+            VM3["⚔️ minecraft (172.30.1.91)<br>Fabric Server"]:::vmNode
+            VM4["🎵 navidrome (172.30.1.92)<br>Music Streamer"]:::vmNode
         end
     end
 
-    subgraph IdentityServices ["Identity & Core Services"]
-        VM1 -->|Provides| LDAP[Directory Service]
-        VM1 -->|Provides| Kerberos[Auth Realm]
-        VM1 -->|Provides| BIND[DNS / BIND9]
-        VM2 & VM3 & VM4 -->|DNS Resolution| VM1
+    %% Traffic Routing Paths
+    PublicUsers -->|HTTPS| CF
+    Gamers -->|Port 25565| PI
+
+    CF -->|Forward Port 80| VM2
+    PI -->|Forward Port 25565| VM3
+
+    %% Storage Mounting Path
+    VM4 -->|rclone FUSE Mount| GDrive
+
+    %% Subgraph Colors
+    style Host fill:#161d1c,stroke:#415854,stroke-width:2px;
+    style Bridge fill:#212c2a,stroke:#70a99f,stroke-width:1px;
+    style Tunnels fill:#212c2a,stroke:#ffca80,stroke-width:1px,stroke-dasharray: 5 5;
+```
+
+### System Administration & Observability
+
+This diagram details the internal control plane, showing how client VMs authenticate via **FreeIPA** (LDAP/Kerberos/DNS) and how **Prometheus** scrapes host metrics via **Node Exporters** across all nodes.
+
+```mermaid
+graph TD
+    %% My Color Palette
+    classDef hostNode fill:#161d1c,stroke:#415854,color:#f8f8f2,stroke-width:2px;
+    classDef ipdNode fill:#2b3b38,stroke:#ff9580,color:#ff9580,stroke-width:1.5px;
+    classDef vmNode fill:#2b3b38,stroke:#70a99f,color:#f8f8f2,stroke-width:1px;
+    classDef obsNode fill:#2b3b38,stroke:#8aff80,color:#8aff80,stroke-width:1.5px;
+
+    %% Core Services
+    VM1["🔑 freeipa.lab.local (172.30.1.85)<br>LDAP / Kerberos / BIND DNS"]:::ipdNode
+
+    %% Monitored VMs (Nodes)
+    subgraph Nodes ["Monitored Nodes (Port: 9100)"]
+        HostOS["🖥️ Hypervisor Host (172.30.1.200)"]:::hostNode
+        VM3["⚔️ minecraft VM (172.30.1.91)"]:::vmNode
+        VM4["🎵 navidrome VM (172.30.1.92)"]:::vmNode
     end
 
-    subgraph ContainerizedWorkloads ["Containerized Workloads (Podman)"]
-        VM2 -->|Runs| Nginx[Nginx Portal Website]
-        VM2 -->|Runs| Prom[Prometheus TSDB]
-        VM2 -->|Runs| Grafana[Grafana Dashboard]
-
-        VM3 -->|Runs| Minecraft[Fabric Minecraft Server]
-
-        VM4 -->|Runs| ND[Navidrome Server]
-        VM4 -->|Mounts| GDrive[rclone Google Drive FUSE]
+    %% Monitoring Stack
+    subgraph PortfolioVM ["portfolio VM (172.30.1.93)"]
+        Prom["📈 Prometheus TSDB"]:::obsNode
+        Grafana["📊 Grafana Dashboard"]:::obsNode
     end
 
-    subgraph IngressTunnels ["Secure Ingress & Tunnels"]
-        VM2 -->|Exposes Nginx / Grafana| CF[Cloudflared Tunnel]
-        VM3 -->|Exposes Port 25565| PI[Playit.gg Tunnel]
-    end
+    %% Telemetry Connections
+    HostOS & VM1 & VM3 & VM4 & PortfolioVM -.->|Node Exporter Scrape| Prom
+    Prom -->|Data Source| Grafana
 
-    subgraph ClusterTelemetry ["Cluster Telemetry"]
-        HostOS & VM1 & VM2 & VM3 & VM4 -->|Node Exporter:9100| Prom
-    end
+    %% DNS Registry Connections
+    Nodes & PortfolioVM --->|DNS Lookups| VM1
 
-    CF -->|Secure HTTPS| PublicInternet((Public Internet))
-    PI -->|Secure UDP/TCP| Gamers((Minecraft Clients))
+    %% Subgraph Colors
+    style Nodes fill:#212c2a,stroke:#7099f,stroke-width:1px;
+    style PortfolioVM fill:#161d1c,stroke:#415854,stroke-width:2px;
+```
