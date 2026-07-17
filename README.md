@@ -72,24 +72,25 @@ graph TD
     %% Monitored VMs (Nodes)
     subgraph Nodes ["Monitored Nodes (Port: 9100)"]
         HostOS["🖥️ Hypervisor Host (172.30.1.200)"]:::hostNode
+        VM2["📄 portfolio VM (172.30.1.93)"]:::vmNode
         VM3["⚔️ minecraft VM (172.30.1.91)"]:::vmNode
         VM4["🎵 navidrome VM (172.30.1.92)"]:::vmNode
     end
 
     %% Monitoring Stack
-    subgraph PortfolioVM ["portfolio VM (172.30.1.93)"]
+    subgraph PortfolioServices ["portfolio VM Services"]
         Prom["📈 Prometheus TSDB"]:::obsNode
         Grafana["📊 Grafana Dashboard"]:::obsNode
     end
 
-    %% Telemetry Connections
-    HostOS & VM1 & VM3 & VM4 & PortfolioVM -.->|Node Exporter Scrape| Prom
+    %% Telemetry Connections (Clean node-to-node routing)
+    HostOS & VM1 & VM2 & VM3 & VM4 -.->|Node Exporter Scrape| Prom
     Prom -->|Data Source| Grafana
 
     %% DNS Registry Connections
-    Nodes & PortfolioVM --->|DNS Lookups| VM1
+    Nodes --->|DNS Lookups| VM1
 
     %% Subgraph Colors
     style Nodes fill:#212c2a,stroke:#70a99f,stroke-width:1px;
-    style PortfolioVM fill:#161d1c,stroke:#415854,stroke-width:2px;
+    style PortfolioServices fill:#161d1c,stroke:#415854,stroke-width:2px;
 ```
