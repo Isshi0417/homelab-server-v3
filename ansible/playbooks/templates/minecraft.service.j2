@@ -11,8 +11,10 @@ ExecStart=/usr/bin/podman run --name minecraft \
     -p 25565:25565 \
     -v /home/{{ admin_user }}/containers/minecraft:/data \
     -e EULA=TRUE \
+    -e TYPE=FABRIC -e MODRINTH_PROJECTS=fabric-api,architectury-api,geckolib,fabric-language-kotlin,fzzy-config:beta,patchouli,adorable-hamster-pets:beta \
+    -e VERSION=1.20.1 \
     -e MEMORY={{ minecraft_ram_limit | default('4G') }} \
-    docker.io/itzg/minecraft-server:latest
+    docker.io/itzg/minecraft-server:java17
 ExecStop=/usr/bin/podman stop -t 20 minecraft
 ExecStopPost=-/usr/bin/podman rm -f minecraft
 
