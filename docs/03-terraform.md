@@ -18,14 +18,14 @@ graph TD
 
     subgraph Configs ["Declarative Configuration Files"]
         MainTF["📄 main.tf<br>(Resource Specifications)"]:::inputNode
-        CloutInit["📄 cloud_init.cfg<br>(User Provisioning Template)"]:::inputNode
-        NetConfig["📄 network_config.cfg.tpl<br>(Static IP Mappings)"]
+        CloudInit["📄 cloud_init.cfg<br>(User Provisioning Template)"]:::inputNode
+        NetConfig["📄 network_config.cfg.tpl<br>(Static IP Mappings)"]:::inputNOde
     end
 
     Terraform["🚀 Terraform Provider<br>(dmacvicar/libvirt)"]:::tfNode
 
     subgraph Host ["hypervisor.lab.local (172.30.1.200)"]
-        BaseImage["💿 Cloud base OS templates<br>(Alma10 & Deb12)"]:::hostNode
+        BaseImages["💿 Cloud base OS templates<br>(Alma10 & Deb12)"]:::hostNode
         StoragePool["🗂️ VM Storage Pool<br>(/var/lib/libvirt/images/vm_pool)"]:::hostNode
     end
 
