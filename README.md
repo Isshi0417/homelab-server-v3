@@ -105,3 +105,4 @@ graph TD
 *   [**Centralized Identity & DNS Management**](./docs/04-identity.md)
 *   [**Application Container Deployments**](./docs/05-applications.md)
 *   [**Ingress & Secure Tunnels**](./docs/06-tunnels.md)
+*   [**Observability & Telemetry**](./docs/07-observability.md)
