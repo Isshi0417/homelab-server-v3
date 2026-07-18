@@ -7,7 +7,7 @@ Wants=network-online.target prometheus.service
 Type=simple
 Restart=always
 ExecStartPre=-/usr/bin/podman rm -f grafana
-ExecStart=/usr/bin/podman run --name grafana -p 3000:3000 -v /home/{{ admin_user }}/containers/grafana/data:/var/lib/grafana:z,U docker.io/grafana/grafana-oss:latest
+ExecStart=/usr/bin/podman run --name grafana -p 3000:3000 -v /home/{{ admin_user }}/containers/grafana/data:/var/lib/grafana:z,U docker.io/grafana/grafana-oss:11.0.0
 ExecStop=/usr/bin/podman stop -t 10 grafana
 ExecStopPost=-/usr/bin/podman rm -f grafana
 
