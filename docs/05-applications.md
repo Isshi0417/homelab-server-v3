@@ -83,6 +83,7 @@ graph TD
 
     %% Subgraph Colors
     style VM_Navidrome fill:#111615,stroke:#70a99f,stroke-width:1px;
+```
 
 ---
 
