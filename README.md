@@ -104,3 +104,4 @@ graph TD
 *   [**Infrastructure Provisioning with Terraform**](./docs/03-terraform.md)
 *   [**Centralized Identity & DNS Management**](./docs/04-identity.md)
 *   [**Application Container Deployments**](./docs/05-applications.md)
+*   [**Ingress & Secure Tunnels**](./docs/06-tunnels.md)
