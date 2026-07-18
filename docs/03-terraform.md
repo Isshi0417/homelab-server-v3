@@ -19,7 +19,7 @@ graph TD
     subgraph Configs ["Declarative Configuration Files"]
         MainTF["📄 main.tf<br>(Resource Specifications)"]:::inputNode
         CloudInit["📄 cloud_init.cfg<br>(User Provisioning Template)"]:::inputNode
-        NetConfig["📄 network_config.cfg.tpl<br>(Static IP Mappings)"]:::inputNOde
+        NetConfig["📄 network_config.cfg.tpl<br>(Static IP Mappings)"]:::inputNode
     end
 
     Terraform["🚀 Terraform Provider<br>(dmacvicar/libvirt)"]:::tfNode
