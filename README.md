@@ -100,3 +100,4 @@ graph TD
 ## 🗂️ Documentation Index
 
 *   [**Local Development Setup**](./docs/01-dev-env.md)
+*   [**Bare-Metal Hypervisor Preparation**](./docs/02-hypervisor.md)
