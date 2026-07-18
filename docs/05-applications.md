@@ -8,49 +8,81 @@ This document details the containerized application architecture, storage mounts
 
 Every application workload runs inside an isolated rootless container. The host's local **Systemd** daemon manages the startup dependencies and lifecycle of the containers:
 
+### 1. Portfolio Web Server (`portfolio.lab.local`)
+Exposes the portfolio static webpage assets using an Nginx Alpine container containerized by a simple Systemd unit wrapper.
+
 ```mermaid
 graph TD
     %% My Color Palette
-    classDef vmNode fill:#161d1c,stroke:#7099f,color:#f8f8f2,stroke-width:1.5px;
-    classDef svcNode fill:#212c2a,stroke;#9580ff,color:#f8f8f2,stroke-width:1px;
+    classDef vmNode fill:#161d1c,stroke:#70a99f,color:#f8f8f2,stroke-width:1.5px;
+    classDef svcNode fill:#212c2a,stroke:#9580ff,color:#f8f8f2,stroke-width:1px;
     classDef appNode fill:#2b3b38,stroke:#8aff80,color:#8aff80,stroke-width:1.5px;
-    classDef mountNode fill:#212c2a,stroke:#ffca80,color:#ffca80,stroke-width:1px;
 
-    subgraph VM_Portfolio ["portfolio.lab.local"]
+    subgraph VM_Portfolio ["portfolio.lab.local VM"]
         Svc_Portal["⚙️ portal.service<br>(Systemd)"]:::svcNode
         App_Nginx["🌐 Nginx Web Server<br>(Port 80)"]:::appNode
         SiteFiles["📁 /home/sho/containers/portal<br>(Static HTML/CSS/JS)"]:::vmNode
     end
 
-    subgraph VM_Minecraft ["minecraft.lab.local"]
+    Svc_Portal ===>|Launches & restarts| App_Nginx
+    App_Nginx -->|Mounts assets read-only| SiteFiles
+
+    %% Subgraph Colors
+    style VM_Portfolio fill:#111615,stroke:#70a99f,stroke-width:1px;
+```
+
+---
+
+### 2. Fabric Minecraft Server (`minecraft.lab.local`)
+Runs a Java-based Minecraft game server node with Fabric mod loaders and maps a persistent directory for user/world preservation.
+
+```mermaid
+graph TD
+    %% My Color Palette
+    classDef vmNode fill:#161d1c,stroke:#70a99f,color:#f8f8f2,stroke-width:1.5px;
+    classDef svcNode fill:#212c2a,stroke:#9580ff,color:#f8f8f2,stroke-width:1px;
+    classDef appNode fill:#2b3b38,stroke:#8aff80,color:#8aff80,stroke-width:1.5px;
+
+    subgraph VM_Minecraft ["minecraft.lab.local VM"]
         Svc_Minecraft["⚙️ minecraft.service<br>(Systemd)"]:::svcNode
         App_MC["⚔️ Fabric Server<br>(Port 25565)"]:::appNode
         MCDatabase["📁 /home/sho/containers/minecraft<br>(Persistent /data)"]:::vmNode
     end
 
-    subgraph VM_Navidrome ["navidrome.lab.local"]
+    Svc_Minecraft ===>|Launches & restarts| App_MC
+    App_MC -->|Mounts database read-write| MCDatabase
+
+    %% Subgraph Colors
+    style VM_Minecraft fill:#111615,stroke:#70a99f,stroke-width:1px;
+```
+
+---
+
+### 3. Navidrome Music Server (`navidrome.lab.local`)
+Traces the startup dependencies where Google Drive is FUSE-mounted via `rclone` before the Navidrome audio engine mounts and indexes the path.
+
+```mermaid
+graph TD
+    %% My Color Palette
+    classDef vmNode fill:#161d1c,stroke:#70a99f,color:#f8f8f2,stroke-width:1.5px;
+    classDef svcNode fill:#212c2a,stroke:#9580ff,color:#f8f8f2,stroke-width:1px;
+    classDef appNode fill:#2b3b38,stroke:#8aff80,color:#8aff80,stroke-width:1.5px;
+    classDef mountNode fill:#212c2a,stroke:#ffca80,color:#ffca80,stroke-width:1px;
+
+    subgraph VM_Navidrome ["navidrome.lab.local VM"]
         Svc_Rclone["⚙️ rclone-mount.service<br>(Systemd)"]:::svcNode
         Svc_Navidrome["⚙️ navidrome.service<br>(Systemd)"]:::svcNode
         App_ND["🎵 Navidrome Streamer<br>(Port 4533)"]:::appNode
         GDrive["☁️ Google Drive<br>(FUSE Mount: /mnt/gdrive)"]:::mountNode
     end
 
-    Svc_Portal ===>|Launches| App_Nginx
-    App_Nginx -->|Mounts read-only| SiteFiles
-
-    Svc_Minecraft ===>|Launches| App_MC
-    App_MC -->|Mounts read-write| MCDatabase
-
-    Svc_Rclone ===>|Mounts Google Drive via| GDrive
-    Svc_Navidrome ===>|Launches| App_ND
-    Svc_Navidrome -.->|Requires| Svc_Rclone
-    App_ND -->|Scrapes MP3s from| GDrive
+    Svc_Rclone ===>|Mounts remote GDrive via| GDrive
+    Svc_Navidrome ===>|Launches streamer| App_ND
+    Svc_Navidrome -.->|Requires active mount| Svc_Rclone
+    App_ND -->|Scrapes MP3 audio files from| GDrive
 
     %% Subgraph Colors
-    style VM_Portfolio fill:#111615,stroke:#70a99f,stroke-width:1px;
-    style VM_Minecraft fill:#111615,stroke:#70a99f,stroke-width:1px;
     style VM_Navidrome fill:#111615,stroke:#70a99f,stroke-width:1px;
-```
 
 ---
 
