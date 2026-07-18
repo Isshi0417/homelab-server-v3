@@ -108,7 +108,7 @@ ethernets:
                 - 1.1.1.1
 ```
 
-*Note: The primary nameserver points to `172.30.1.85`(the FreeIPA DNS server), with a fallback to `1.1.1.1`.
+*Note: The primary nameserver points to `172.30.1.85`(the FreeIPA DNS server), with a fallback to `1.1.1.1`.*
 
 ---
 
