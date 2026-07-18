@@ -103,3 +103,4 @@ graph TD
 *   [**Bare-Metal Hypervisor Preparation**](./docs/02-hypervisor.md)
 *   [**Infrastructure Provisioning with Terraform**](./docs/03-terraform.md)
 *   [**Centralized Identity & DNS Management**](./docs/04-identity.md)
+*   [**Application Container Deployments**](./docs/05-applications.md)
