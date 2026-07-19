@@ -5,17 +5,21 @@ ansible/playbooks/*.retry
 *.retry
 
 # === Terraform ===
-terraform/.terraform/
-terraform/.terraform.lock.*
+.terraform/
+.terraform.lock.hcl
+*.terraform.lock.*
+crash.log
+*.crash.log
 
 # === State Files ===
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
-terraform/terraform.tfstate.d/
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.*
 
 # === Variables ===
-terraform/*.tfvars
-terraform/*.tfvars.json
+*.tfvars
+*.tfvars.json
 
 # === OS & IDE ===
 .DS_Store

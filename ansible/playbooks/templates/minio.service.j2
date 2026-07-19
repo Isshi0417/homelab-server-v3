@@ -1,0 +1,21 @@
+[Unit]
+Description=MinIO Object Storage Container
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStartPre=-/usr/bin/podman rm -f minio
+ExecStart=/usr/bin/podman run --name minio \
+    -p 9000:9000 \
+    -p 9001:9001 \
+    -v {{ minio_data_dir }}:/data:z,U \
+    -e "MINIO_ROOT_USER={{ minio_root_user }}" \
+    -e "MINIO_ROOT_PASSWORD={{ minio_root_password }}" \
+    quay.io/minio/minio:latest server /data --console-address ":9001"
+ExecStop=/usr/bin/podman stop -t 10 minio
+ExecStopPost=-/usr/bin/podman rm -f minio
+
+[Install]
+WantedBy=multi-user.target
