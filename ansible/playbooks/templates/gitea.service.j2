@@ -11,7 +11,7 @@ WorkingDirectory=/home/{{ admin_user }}/containers/gitea
 ExecStartPre=-/usr/bin/podman rm -f gitea
 ExecStart=/usr/bin/podman run --name gitea --rm \
     -p 3000:3000 \
-    -p 2222:22 \
+    -p 2222:2222 \
     -v /home/{{ admin_user }}/containers/gitea/data:/var/lib/gitea:z,U \
     -v /home/{{ admin_user }}/containers/gitea/config:/etc/gitea:z,U \
     -e GITEA__security__INSTALL_LOCK=true \

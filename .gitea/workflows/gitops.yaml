@@ -27,4 +27,5 @@ jobs:
         run: |
           cd ansible
           echo "dummy" > .vault_pass
+          ansible-galaxy collection install ansible.posix
           ansible-lint playbooks/*.yml
