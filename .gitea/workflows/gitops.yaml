@@ -26,4 +26,5 @@ jobs:
       - name: Ansible Lint
         run: |
           cd ansible
+          echo "dummy" > .vault_pass
           ansible-lint playbooks/*.yml
