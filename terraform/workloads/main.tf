@@ -71,18 +71,17 @@ resource "libvirt_volume" "navidrome_disk" {
   format         = "qcow2"
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/templates/cloud_init.cfg")
-  vars = {
+locals {
+  user_data = templatefile("${path.module}/templates/cloud_init.cfg", {
     admin_user = "sho"
     ssh_key    = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILM/84tpkx+yYsA8Zr5or1xuELOGMl0JEP576SyUc9eC sho@bazzite"
-  }
+  })
 }
 
 resource "libvirt_cloudinit_disk" "freeipa_init" {
   name      = "freeipa-init.iso"
   pool      = "vm_pool"
-  user_data = data.template_file.user_data.rendered
+  user_data = local.user_data
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
     interface_name = "etho0"
     ip_address     = "172.30.1.85"
@@ -94,7 +93,7 @@ resource "libvirt_cloudinit_disk" "freeipa_init" {
 resource "libvirt_cloudinit_disk" "portfolio_init" {
   name      = "portfolio-init.iso"
   pool      = "vm_pool"
-  user_data = data.template_file.user_data.rendered
+  user_data = local.user_data
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
     interface_name = "ens3"
     ip_address     = "172.30.1.93"
@@ -106,7 +105,7 @@ resource "libvirt_cloudinit_disk" "portfolio_init" {
 resource "libvirt_cloudinit_disk" "minecraft_init" {
   name      = "minecraft-init.iso"
   pool      = "vm_pool"
-  user_data = data.template_file.user_data.rendered
+  user_data = local.user_data
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
     interface_name = "ens3"
     ip_address     = "172.30.1.91"
@@ -118,7 +117,7 @@ resource "libvirt_cloudinit_disk" "minecraft_init" {
 resource "libvirt_cloudinit_disk" "navidrome_init" {
   name      = "navidrome-init.iso"
   pool      = "vm_pool"
-  user_data = data.template_file.user_data.rendered
+  user_data = local.user_data
   network_config = templatefile("${path.module}/templates/network_config.cfg.tpl", {
     interface_name = "ens3"
     ip_address     = "172.30.1.92"
