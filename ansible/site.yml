@@ -26,3 +26,7 @@
 - name: Grafana/Prometheus Setup
   import_playbook: ./playbooks/07_observability.yml
   tags: observability
+
+- name: Gitea & Act Runner Setup
+  import_playbook: ./playbooks/09_gitea_setup.yml
+  tags: gitea

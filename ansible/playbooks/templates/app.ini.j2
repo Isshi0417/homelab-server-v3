@@ -1,0 +1,25 @@
+APP_NAME = Gitea: Git with a cup of tea
+RUN_USER = git
+RUN_MODE = prod
+
+[database]
+DB_TYPE = sqlite3
+PATH = /var/lib/gitea/data/gitea.db
+
+[repository]
+ROOT = /var/lib/gitea/git/repositories
+
+[server]
+SSH_DOMAIN = 172.30.1.80
+HTTP_PORT = 3000
+ROOT_URL = http://172.30.1.80:3000/
+DISABLE_SSH = false
+SSH_PORT = 2222
+LFS_START_SERVER = true
+
+[security]
+INSTALL_LOCK = true
+SECRET_KEY = {{ gitea_secret_key | default('GiteaSecretKeyChangeMeDefault123') }}
+
+[service]
+DISABLE_REGISTRATION = false

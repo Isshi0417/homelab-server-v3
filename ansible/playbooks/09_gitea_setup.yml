@@ -1,0 +1,152 @@
+---
+- name: Deploy Gitea and Act Runner on Utility VM
+  hosts: utility.lab.local
+  gather_facts: true
+  become: false
+
+  vars:
+    gitea_container_dir: "/home/{{ admin_user }}/containers/gitea"
+    runner_dir: "/home/{{ admin_user }}/containers/act_runner"
+
+  tasks:
+    - name: Create Gitea persistent volume directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ gitea_container_dir }}/data"
+        - "{{ gitea_container_dir }}/config"
+
+    - name: Deploy pre-seeded Gitea Configuration
+      become: true
+      ansible.builtin.template:
+        src: "./templates/app.ini.j2"
+        dest: "{{ gitea_container_dir }}/config/app.ini"
+        owner: 100999
+        group: 100999
+        mode: "0644"
+
+    - name: Enable systemd lingering for the administrator user
+      become: true
+      ansible.builtin.command:
+        cmd: "loginctl enable-linger {{ admin_user }}"
+      changed_when: false
+
+    - name: Deploy Gitea Systemd Service
+      become: true
+      ansible.builtin.template:
+        src: "./templates/gitea.service.j2"
+        dest: "/etc/systemd/system/gitea.service"
+        mode: "0644"
+
+    - name: Enable and start Gitea system service
+      become: true
+      ansible.builtin.systemd_service:
+        name: gitea.service
+        state: restarted
+        enabled: true
+        daemon_reload: true
+
+    - name: Wait for Gitea to become responsive
+      ansible.builtin.wait_for:
+        port: 3000
+        delay: 2
+        timeout: 60
+
+
+    - name: Install build tool dependencies
+      become: true
+      ansible.builtin.package:
+        name:
+          - unzip
+          - git
+          - python3-pip
+        state: present
+
+    - name: Install Ansible-Lint via pip
+      become: true
+      ansible.builtin.pip:
+        name: ansible-lint
+        state: present
+        extra_args: --break-system-packages
+
+    - name: Download and install Terraform CLI
+      become: true
+      ansible.builtin.unarchive:
+        src: "https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip"
+        dest: "/usr/local/bin"
+        remote_src: true
+        mode: "0755"
+
+    - name: Download and install TFLint
+      become: true
+      ansible.builtin.unarchive:
+        src: "https://github.com/terraform-linters/tflint/releases/download/v0.50.1/tflint_linux_amd64.zip"
+        dest: "/usr/local/bin"
+        remote_src: true
+        mode: "0755"
+
+
+    - name: Create Gitea Runner directories
+      become: true
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner }}"
+        group: "{{ item.owner }}"
+        mode: "0755"
+      loop:
+        - { path: "{{ runner_dir }}", owner: "{{ admin_user }}" }
+        - { path: "/etc/act_runner", owner: "root" }
+
+    - name: Deploy Gitea Runner config file
+      become: true
+      ansible.builtin.template:
+        src: "./templates/act_runner_config.yaml.j2"
+        dest: "/etc/act_runner/config.yaml"
+        mode: "0644"
+
+    - name: Download Gitea Runner binary
+      become: true
+      ansible.builtin.get_url:
+        url: "https://dl.gitea.com/gitea-runner/2.1.0/gitea-runner-2.1.0-linux-amd64"
+        dest: "/usr/local/bin/gitea-runner"
+        mode: "0755"
+
+    - name: Generate Gitea runner registration token
+      ansible.builtin.command:
+        cmd: "podman exec -w / -u git gitea gitea --config /etc/gitea/app.ini actions generate-runner-token"
+      register: gitea_runner_token_cmd
+      changed_when: false
+
+    - name: Check if Gitea Runner is already registered
+      ansible.builtin.stat:
+        path: "{{ runner_dir }}/.runner"
+      register: runner_state_file
+
+    - name: Register Gitea Runner with Gitea
+      ansible.builtin.command:
+        cmd: >
+          /usr/local/bin/gitea-runner register
+          --instance http://localhost:3000
+          --token {{ gitea_runner_token_cmd.stdout | trim }}
+          --name utility-runner
+          --labels "linux_amd64:host,self-hosted:host"
+          --no-interactive
+        chdir: "{{ runner_dir }}"
+      when: not runner_state_file.stat.exists
+
+    - name: Deploy Gitea Runner Systemd Service
+      become: true
+      ansible.builtin.template:
+        src: "./templates/act_runner.service.j2"
+        dest: "/etc/systemd/system/act_runner.service"
+        mode: "0644"
+
+    - name: Enable and start Gitea Runner service
+      become: true
+      ansible.builtin.systemd_service:
+        name: act_runner.service
+        state: restarted
+        enabled: true
+        daemon_reload: true

@@ -1,0 +1,16 @@
+[Unit]
+Description=Gitea Act Runner
+After=network-online.target gitea.service
+Wants=gitea.service
+
+[Service]
+Type=simple
+User={{ admin_user }}
+Group={{ admin_user }}
+WorkingDirectory=/home/{{ admin_user }}/containers/act_runner
+ExecStart=/usr/local/bin/gitea-runner daemon --config /etc/act_runner/config.yaml
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

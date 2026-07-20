@@ -1,0 +1,27 @@
+[Unit]
+Description=Gitea Git Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User={{ admin_user }}
+Group={{ admin_user }}
+WorkingDirectory=/home/{{ admin_user }}/containers/gitea
+ExecStartPre=-/usr/bin/podman rm -f gitea
+ExecStart=/usr/bin/podman run --name gitea --rm \
+    -p 3000:3000 \
+    -p 2222:22 \
+    -v /home/{{ admin_user }}/containers/gitea/data:/var/lib/gitea:z,U \
+    -v /home/{{ admin_user }}/containers/gitea/config:/etc/gitea:z,U \
+    -e GITEA__security__INSTALL_LOCK=true \
+    -e GITEA__database__DB_TYPE=sqlite3 \
+    -e GITEA__database__PATH=/var/lib/gitea/data/gitea.db \
+    docker.io/gitea/gitea:1.22-rootless
+ExecStop=/usr/bin/podman -t 10 gitea
+ExecStopPost=-/usr/bin/podman rm -f gitea
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
