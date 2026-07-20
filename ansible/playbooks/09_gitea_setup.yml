@@ -9,7 +9,7 @@
     runner_dir: "/home/{{ admin_user }}/containers/act_runner"
 
   tasks:
-    - name: Create Gitea persistent volume directories
+    - name: Create Gitea persistent volume directories  # noqa risky-file-permissions
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
@@ -61,6 +61,7 @@
           - unzip
           - git
           - python3-pip
+          - nodejs
         state: present
 
     - name: Install Ansible-Lint via pip
@@ -135,6 +136,7 @@
           --no-interactive
         chdir: "{{ runner_dir }}"
       when: not runner_state_file.stat.exists
+      changed_when: true
 
     - name: Deploy Gitea Runner Systemd Service
       become: true

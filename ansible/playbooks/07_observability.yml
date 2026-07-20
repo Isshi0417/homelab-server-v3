@@ -44,12 +44,16 @@
       become: true
       ansible.builtin.command: restorecon -v /usr/local/bin/node_exporter /etc/systemd/system/node_exporter.service
       when: ansible_os_family == "RedHat"
+      changed_when: false
 
     - name: Open port 9100 in firewalld
       become: true
-      ansible.builtin.command: firewall-cmd --permanent --add-port=9100/tcp && firewall-cmd --reload
+      ansible.posix.firewalld:
+        port: 9100/tcp
+        permanent: true
+        state: enabled
+        immediate: true
       when: ansible_os_family == "RedHat"
-      failed_when: false
 
     - name: Start and enable Node Exporter
       become: true
