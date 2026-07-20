@@ -1,0 +1,29 @@
+name: Homelab IaC GitOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Terraform Format Check
+        run: |
+          cd terraform/workloads
+          /usr/local/bin/terraform fmt -check
+
+      - name: Terraform Lint
+        run: |
+          cd terraform/workloads
+          /usr/local/bin/tflint --init
+          /usr/local/bin/tflint
+
+      - name: Ansible Lint
+        run: |
+          cd ansible
+          ansible-lint playbooks/*.yml
